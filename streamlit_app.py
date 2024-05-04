@@ -2,12 +2,7 @@ import streamlit as st
 import joblib
 import numpy as np
 import shap
-import sys
-import matplotlib
-print("Python SYS PATH:", sys.path)
-print("Matplotlib version:", matplotlib.__version__)
-heroku run pip install matplotlib --app your-app-name
-
+import matplotlib.pyplot as plt
 
 # Load your trained model
 model_path = 'diabetes_prediction_model.joblib'  # Adjust path as necessary
@@ -15,7 +10,7 @@ model = joblib.load(model_path)
 
 # Creating the Streamlit interface
 st.title('Diabetes Prediction App')
-st.write('Please enter the following data to predict diabetes:')
+st.write('Please enter the following data to predict the risk of diabetes:')
 
 # Form to input new data for prediction
 pregnancies = st.number_input('Number of pregnancies', min_value=0, step=1)
@@ -30,21 +25,18 @@ age = st.number_input('Age', min_value=0, step=1)
 # Button to make prediction
 if st.button('Predict Diabetes'):
     input_data = np.array([[pregnancies, glucose, blood_pressure, skin_thickness, insulin, bmi, diabetes_pedigree, age]])
-    prediction = model.predict(input_data)
+    prediction_proba = model.predict_proba(input_data)[0, 1]
+    st.write(f'The probability of diabetes is: {prediction_proba:.2%}')
 
-    # Output the prediction
-    if prediction[0] == 0:
-        st.success('The prediction is: No Diabetes')
-    else:
-        st.error('The prediction is: Diabetes')
-
-    # Try to create an explainer with LinearExplainer
+    # Generate SHAP values for the model
     try:
-        explainer = shap.LinearExplainer(model, input_data)
-        shap_values = explainer.shap_values(input_data)
-        st.pyplot(shap.summary_plot(shap_values, input_data, feature_names=['Pregnancies', 'Glucose', 'Blood Pressure', 'Skin Thickness', 'Insulin', 'BMI', 'Diabetes Pedigree', 'Age']))
+        explainer = shap.Explainer(model)
+        shap_values = explainer(input_data)
+        
+        st.pyplot(shap.plots.waterfall(shap_values[0]), clear_figure=True)
     except Exception as e:
-        st.error(f"Error with SHAP explanation: {e}")
+        st.error(f"Error with SHAP explanation: {str(e)}")
+
 
 
 
