@@ -6,6 +6,7 @@ import sys
 import matplotlib
 print("Python SYS PATH:", sys.path)
 print("Matplotlib version:", matplotlib.__version__)
+heroku run pip install matplotlib --app your-app-name
 
 
 # Load your trained model
