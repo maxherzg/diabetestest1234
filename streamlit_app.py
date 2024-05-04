@@ -7,13 +7,6 @@ import shap
 model_path = 'diabetes_prediction_model.joblib'  # Adjust path as necessary
 model = joblib.load(model_path)
 
-# Check the model type and create appropriate SHAP explainer
-try:
-    explainer = shap.TreeExplainer(model)
-except Exception as e:
-    st.error(f"Error with TreeExplainer: {e}")
-    # If TreeExplainer is not suitable, consider a different explainer based on the model type.
-
 # Creating the Streamlit interface
 st.title('Diabetes Prediction App')
 st.write('Please enter the following data to predict diabetes:')
@@ -39,12 +32,14 @@ if st.button('Predict Diabetes'):
     else:
         st.error('The prediction is: Diabetes')
 
-    # Generate and display SHAP values if possible
+    # Try to create an explainer with LinearExplainer
     try:
+        explainer = shap.LinearExplainer(model, input_data)
         shap_values = explainer.shap_values(input_data)
-        st.pyplot(shap.summary_plot(shap_values, input_data))
+        st.pyplot(shap.summary_plot(shap_values, input_data, feature_names=['Pregnancies', 'Glucose', 'Blood Pressure', 'Skin Thickness', 'Insulin', 'BMI', 'Diabetes Pedigree', 'Age']))
     except Exception as e:
-        st.error(f"Error generating SHAP values: {e}")
+        st.error(f"Error with SHAP explanation: {e}")
+
 
 
 
