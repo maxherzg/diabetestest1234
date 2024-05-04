@@ -30,15 +30,17 @@ if st.button('Predict Diabetes'):
 
     # Generate SHAP values for the model
     try:
-        background_data = np.zeros((1, input_data.shape[1]))  # A simple background data point
-        explainer = shap.LinearExplainer(model, background_data)
-        shap_values = explainer.shap_values(input_data)
-
-        # Visualizing the SHAP values with a bar plot
-        shap.summary_plot(shap_values, input_data, feature_names=['Pregnancies', 'Glucose', 'Blood Pressure', 'Skin Thickness', 'Insulin', 'BMI', 'Diabetes Pedigree', 'Age'], plot_type="bar")
-        plt.show()
+        # Ensure compatibility with SHAP LinearExplainer
+        if hasattr(model, "coef_"):
+            background_data = shap.utils.sample(input_data, 1)  # Use a sample as background for more stability in explanations
+            explainer = shap.LinearExplainer(model, background_data)
+            shap_values = explainer.shap_values(input_data)
+            st.pyplot(shap.summary_plot(shap_values, input_data, feature_names=['Pregnancies', 'Glucose', 'Blood Pressure', 'Skin Thickness', 'Insulin', 'BMI', 'Diabetes Pedigree', 'Age'], plot_type="bar"))
+        else:
+            st.error("Model is not supported for SHAP LinearExplainer.")
     except Exception as e:
         st.error(f"Error with SHAP explanation: {str(e)}")
+
 
 
 
