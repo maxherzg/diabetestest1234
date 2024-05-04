@@ -2,6 +2,11 @@ import streamlit as st
 import joblib
 import numpy as np
 import shap
+import sys
+import matplotlib
+print("Python SYS PATH:", sys.path)
+print("Matplotlib version:", matplotlib.__version__)
+
 
 # Load your trained model
 model_path = 'diabetes_prediction_model.joblib'  # Adjust path as necessary
