@@ -3,7 +3,7 @@ import joblib
 import numpy as np
 
 # Load your trained model from the specified path
-model_path = 'path_to_your_model.joblib'  # Update the path as necessary
+model_path = 'diabetes_prediction_model.joblib'  # Update the path as necessary
 model = joblib.load(model_path)
 
 # Streamlit interface
