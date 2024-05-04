@@ -1,6 +1,7 @@
-streamlit
-joblib
-numpy
-shap
-scikit-learn  
-matplotlib 
+streamlit==1.10.0
+joblib==1.1.0
+numpy==1.22.0
+shap==0.40.0
+scikit-learn==1.0.2
+matplotlib==3.4.3
+
