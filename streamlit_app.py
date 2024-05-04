@@ -5,7 +5,7 @@ import shap
 import matplotlib.pyplot as plt
 
 # Load your trained model
-model_path = 'diabetes_prediction_model.joblib'  # Adjust path as necessary
+model_path = 'diabetes_prediction_model.joblib'  # Ensure this path is correct on Streamlit Share
 model = joblib.load(model_path)
 
 # Creating the Streamlit interface
@@ -28,18 +28,18 @@ if st.button('Predict Diabetes'):
     prediction_proba = model.predict_proba(input_data)[0, 1]
     st.write(f'The probability of diabetes is: {prediction_proba:.2%}')
 
-    # Generate SHAP values for the model
+    # Generating SHAP values for the input data
     try:
-        # Ensure compatibility with SHAP LinearExplainer
-        if hasattr(model, "coef_"):
-            background_data = shap.utils.sample(input_data, 1)  # Use a sample as background for more stability in explanations
-            explainer = shap.LinearExplainer(model, background_data)
-            shap_values = explainer.shap_values(input_data)
-            st.pyplot(shap.summary_plot(shap_values, input_data, feature_names=['Pregnancies', 'Glucose', 'Blood Pressure', 'Skin Thickness', 'Insulin', 'BMI', 'Diabetes Pedigree', 'Age'], plot_type="bar"))
-        else:
-            st.error("Model is not supported for SHAP LinearExplainer.")
+        # Create a SHAP explainer
+        explainer = shap.LinearExplainer(model, input_data)
+        shap_values = explainer.shap_values(input_data)
+
+        # Plotting the SHAP values
+        shap.summary_plot(shap_values, input_data, feature_names=['Pregnancies', 'Glucose', 'Blood Pressure', 'Skin Thickness', 'Insulin', 'BMI', 'Diabetes Pedigree', 'Age'], plot_type='bar')
+        plt.show()
     except Exception as e:
         st.error(f"Error with SHAP explanation: {str(e)}")
+
 
 
 
