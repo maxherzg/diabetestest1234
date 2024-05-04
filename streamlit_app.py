@@ -4,7 +4,7 @@ import numpy as np
 import shap
 
 # Load your trained model
-model_path = 'path/to/your/model.joblib'  # Adjust path as necessary
+model_path = 'diabetes_prediction_model.joblib  # Adjust path as necessary
 model = joblib.load(model_path)
 
 # Check the model type and create appropriate SHAP explainer
