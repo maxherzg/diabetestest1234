@@ -1,30 +1,53 @@
 import streamlit as st
-import joblib
-import numpy as np
+import pandas as pd
+import pickle
 
-# Correct the model path to a relative path assuming both the script and model are in the same directory
-model_path = 'diabetes_prediction_model.joblib'
-model = joblib.load(model_path)  # This loads the model directly from your repository
+model = pickle.load(open("model.pkl", 'rb'))
 
-# Creating the Streamlit interface
-st.title('Diabetes Prediction App')
-st.write('Please enter the following data to predict your diabetes probability:')
+st.title('Health Risk Prediction App')
+st.write('Please enter the following data to predict health risks:')
 
-# Form to input new data for prediction
-pregnancies = st.number_input('Number of pregnancies', min_value=0, step=1)
-glucose = st.number_input('Plasma glucose concentration', min_value=0, step=1)
-blood_pressure = st.number_input('Diastolic blood pressure (mm Hg)', min_value=0, step=1)
-skin_thickness = st.number_input('Triceps skin fold thickness (mm)', min_value=0, step=1)
-insulin = st.number_input('2-Hour serum insulin (mu U/ml)', min_value=0, step=1)
-bmi = st.number_input('Body mass index', min_value=0.0, step=0.1)
-diabetes_pedigree = st.number_input('Diabetes pedigree function', min_value=0.0, step=0.01)
-age = st.number_input('Age', min_value=0, step=1)
+HighBP = st.number_input('High Blood Pressure (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
+HighChol = st.number_input('High Cholesterol (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
+CholCheck = st.number_input('Cholesterol Checked in last 5 years (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
+BMI = st.number_input('Body Mass Index', min_value=0.0, step=0.1)
+Smoker = st.number_input('Smoker (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
+Stroke = st.number_input('History of Stroke (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
+HeartDiseaseorAttack = st.number_input('Heart Disease or Heart Attack (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
+PhysActivity = st.number_input('Physical Activity (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
+Fruits = st.number_input('Consumes Fruits Regularly (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
+Veggies = st.number_input('Consumes Vegetables Regularly (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
+HvyAlcoholConsump = st.number_input('Heavy Alcohol Consumption (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
+AnyHealthcare = st.number_input('Has Healthcare (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
+NoDocbcCost = st.number_input('No Doctor Because of Cost (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
+GenHlth = st.number_input('General Health (1-5)', min_value=1, max_value=5, step=1)
+MentHlth = st.number_input('Mental Health (Days of poor mental health in past 30 days)', min_value=0, step=1)
+PhysHlth = st.number_input('Physical Health (Days of poor physical health in past 30 days)', min_value=0, step=1)
+DiffWalk = st.number_input('Difficulty Walking (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
+Sex = st.radio('Sex', options=['Male', 'Female'])
+Age = st.number_input('Age', min_value=0, step=1)
+Education = st.selectbox('Education Level', options=['Less than High School', 'High School Graduate', 'Some College', 'College Graduate'])
+Income = st.selectbox('Income Level', options=['Less than $10,000', '$10,000 to $24,999', '$25,000 to $49,999', '$50,000 to $74,999', '$75,000 or more'])
 
-# Button to make prediction
-if st.button('Predict Diabetes'):
-    input_data = np.array([[pregnancies, glucose, blood_pressure, skin_thickness, insulin, bmi, diabetes_pedigree, age]])
-    prediction_proba = model.predict_proba(input_data)[0][1]  # Probability of having diabetes
-    st.write(f'The probability of having diabetes is: {prediction_proba * 100:.2f}%')
+sex_numeric = 1 if Sex == 'Male' else 0
+education_levels = {'Less than High School': 1, 'High School Graduate': 2, 'Some College': 3, 'College Graduate': 4}
+education_numeric = education_levels[Education]
+income_levels = {'Less than $10,000': 1, '$10,000 to $24,999': 2, '$25,000 to $49,999': 3, '$50,000 to $74,999': 4, '$75,000 or more': 5}
+income_numeric = income_levels[Income]
+
+if st.button('Predict Health Risks'):
+
+    input_data = [HighBP, HighChol, CholCheck, BMI, Smoker, Stroke, HeartDiseaseorAttack, PhysActivity, Fruits, Veggies, 
+                  HvyAlcoholConsump, AnyHealthcare, NoDocbcCost, GenHlth, MentHlth, PhysHlth, DiffWalk, sex_numeric, Age, 
+                  education_numeric, income_numeric]
+    input_df = pd.DataFrame([input_data], columns = ['HighBP', 'HighChol', 'CholCheck', 'BMI', 'Smoker', 'Stroke', 
+                                                    'HeartDiseaseorAttack', 'PhysActivity', 'Fruits', 'Veggies', 
+                                                    'HvyAlcoholConsump', 'AnyHealthcare', 'NoDocbcCost', 'GenHlth', 
+                                                    'MentHlth', 'PhysHlth', 'DiffWalk', 'Sex', 'Age', 'Education', 
+                                                    'Income'])
+
+    prediction = model.predict(input_df)
+    st.write('Prediction:', 'Higher Risk' if prediction[0] == 1 else 'Lower Risk')
 
 
 
