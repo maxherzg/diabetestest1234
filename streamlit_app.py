@@ -15,11 +15,8 @@ HighChol = st.radio('Do you have High Cholesterol', options=['Yes', 'No'])
 CholCheck = st.radio('Did you have your Cholesterol checked in the last 5 years', options=['Yes', 'No'])
 
 
-#
-st.title('BMI Calculator and Information')
 
-# Section to directly input and get BMI
-st.header("Calculate Your BMI")
+BMI = st.header("Calculate Your BMI")
 col1, col2 = st.columns(2)
 
 with col1:
@@ -28,65 +25,14 @@ with col2:
     height = st.number_input("Enter your height in meters (m):", min_value=0.0, format="%.2f")
 
 if st.button('Calculate BMI'):
-    if height > 0:  # Check to avoid division by zero
+    if height > 0:  
         calculated_bmi = weight / (height ** 2)
         st.write(f"Your Calculated BMI: {calculated_bmi:.2f}")
-        
-        # Categorize the calculated BMI
-        if calculated_bmi < 18.5:
-            st.error("You are underweight.")
-        elif 18.5 <= calculated_bmi <= 24.9:
-            st.success("You have a normal weight.")
-        elif 25 <= calculated_bmi <= 29.9:
-            st.warning("You are overweight.")
-        elif 30 <= calculated_bmi <= 34.9:
-            st.error("You are considered obese (Class I).")
-        elif 35 <= calculated_bmi <= 39.9:
-            st.error("You are considered obese (Class II).")
-        elif calculated_bmi >= 40:
-            st.error("You are considered obese (Class III).")
+
+        prediction = model.predict([[calculated_bmi]])
+        st.write('Health Risk Prediction:', 'Higher Risk' if prediction[0] == 1 else 'Lower Risk')
     else:
         st.error("Height must be greater than zero to calculate BMI.")
-
-# Display BMI categories for general information
-
-
-# Use a slider to display BMI for educational purposes (non-interactive in terms of data entry)
-st.header("Understand BMI Categories")
-bmi_slider = st.slider('Move the slider to see BMI categories:', min_value=0.0, max_value=50.0, step=0.1, value=22.0)
-
-if bmi_slider < 18.5:
-    st.write("Underweight")
-elif 18.5 <= bmi_slider <= 24.9:
-    st.write("Normal weight")
-elif 25 <= bmi_slider <= 29.9:
-    st.write("Overweight")
-elif 30 <= bmi_slider <= 34.9:
-    st.write("Obesity class I")
-elif 35 <= bmi_slider <= 39.9:
-    st.write("Obesity class II")
-elif bmi_slider >= 40:
-    st.write("Obesity class III")
-#
-
-
-BMI = st.slider('BMI', min_value=0.0, max_value=50.0, step=0.1, value=22.0)
-
-bmi = BMI
-
-if bmi < 18.5:
-    st.write(f"Your BMI is {bmi}. This is considered Underweight.")
-elif 18.5 <= bmi <= 24.9:
-    st.write(f"Your BMI is {bmi}. This is considered Normal weight.")
-elif 25 <= bmi <= 29.9:
-    st.write(f"Your BMI is {bmi}. This is considered Overweight.")
-elif 30 <= bmi <= 34.9:
-    st.write(f"Your BMI is {bmi}. This is considered Obesity class I.")
-elif 35 <= bmi <= 39.9:
-    st.write(f"Your BMI is {bmi}. This is considered Obesity class II.")
-elif bmi >= 40:
-    st.write(f"Your BMI is {bmi}. This is considered Obesity class III.")
-
 
 Smoker = st.radio('Smoker', options=['Yes', 'No'])
 Stroke = st.radio('Stroke', options=['Yes', 'No'])
