@@ -15,10 +15,9 @@ except Exception as e:
 st.title('Health Risk Prediction App')
 st.write('Please enter your data to predict health risks:')
 
-# Input fields for health data
-HighBP = st.number_input('High Blood Pressure (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
-HighChol = st.number_input('High Cholesterol (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
-CholCheck = st.number_input('Cholesterol Checked in last 5 years (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
+HighBP = st.radio('Do you have High Blood Pressure', options=['Yes', 'No'])
+HighChol = st.radio('Do you have High Colesterol', options=['Yes', 'No'])
+CholCheck = st.radio('Did you have your Cholesterol checked in the last 5 years', options=['Yes', 'No'])
 
 # BMI Calculator
 st.header("BMI Calculator and Information")
@@ -46,20 +45,23 @@ if st.button('Calculate BMI'):
     else:
         st.error("Height must be greater than zero to calculate BMI.")
 
-# Additional health information
-Smoker = st.number_input('Smoker (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
-Stroke = st.number_input('History of Stroke (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
-HeartDiseaseorAttack = st.number_input('Heart Disease or Heart Attack (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
-PhysActivity = st.number_input('Physical Activity (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
-Fruits = st.number_input('Consumes Fruits Regularly (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
-Veggies = st.number_input('Consumes Vegetables Regularly (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
-HvyAlcoholConsump = st.number_input('Heavy Alcohol Consumption (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
-AnyHealthcare = st.number_input('Has Healthcare (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
-NoDocbcCost = st.number_input('No Doctor Because of Cost (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
-GenHlth = st.number_input('General Health (1-5)', min_value=1, max_value=5, step=1)
-MentHlth = st.number_input('Mental Health (Days of poor mental health in past 30 days)', min_value=0, step=1)
-PhysHlth = st.number_input('Physical Health (Days of poor physical health in past 30 days)', min_value=0, step=1)
-DiffWalk = st.number_input('Difficulty Walking (1 for Yes, 0 for No)', min_value=0, max_value=1, step=1)
+Smoker = st.radio('Smoker', options=['Yes', 'No'])
+Stroke = st.radio('Stroke', options=['Yes', 'No'])
+HeartDiseaseorAttack = st.radio('HeartDiseaseorAttack', options=['Yes', 'No'])
+PhysActivity = st.radio('PhysActivity', options=['Yes', 'No'])
+Fruits = st.radio('Do you consume at least 1 portion of fruits per day', options=['Yes', 'No'])
+Veggies = st.radio('Do you consume at least 1 portion of veggies per day', options=['Yes', 'No'])
+HvyAlcoholConsump = st.radio('Do you drink more than 7 drinks per week', options=['Yes', 'No'])
+AnyHealthcare = st.radio('Do you have any kind of Healthcare', options=['Yes', 'No'])
+NoDocbcCost = st.radio('Have you ever avoided going to Doctor because of the cost', options=['Yes', 'No'])
+
+GenHlth = st.select_slider('How doyou consider your General Health, 1 being very poor and 5 being amazing',options=list(range(1, 6)),value=3)
+
+MentHlth = st.select_slider('How many days of poor mental health in the past 30 days',options=list(range(1, 31)),value=15)
+
+PhysHlth = st.select_slider('How many days of poor physical health in the past 30 days',options=list(range(1, 31)),value=15)
+
+DiffWalk = st.radio('Do you have any difficulty in walking?', options=['Yes', 'No'])
 Sex = st.radio('Sex', options=['Male', 'Female'])
 Age = st.number_input('Age', min_value=0, step=1)
 Education = st.selectbox('Education Level', options=['Less than High School', 'High School Graduate', 'Some College', 'College Graduate'])
