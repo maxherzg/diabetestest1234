@@ -66,8 +66,8 @@ DiffWalk_numeric = 1 if DiffWalk == 'Yes' else 0
 Sex = st.radio('Sex', options=['Male', 'Female'])
 sex_numeric = 1 if Sex == 'Male' else 0
 Age = st.number_input('Age', min_value=0, step=1)
-Education = st.selectbox('Education Level', options=['Less than High School', 'High School Graduate', 'Some College', 'College Graduate'])
-education_numeric = {'Less than High School': 1, 'High School Graduate': 2, 'Some College': 3, 'College Graduate': 4}[Education]
+Education = st.selectbox('Education Level', options=['Less than High School', 'High School Graduate', 'College', 'Graduated School'])
+education_numeric = {'Less than High School': 1, 'High School Graduate': 2, 'College': 3, 'Graduated School': 4}[Education]
 Income = st.selectbox('Income Level', options=['Less than $10,000', '$10,000 to $24,999', '$25,000 to $49,999', '$50,000 to $74,999', '$75,000 or more'])
 income_numeric = {'Less than $10,000': 1, '$10,000 to $24,999': 2, '$25,000 to $49,999': 3, '$50,000 to $74,999': 4, '$75,000 or more': 5}[Income]
 if st.button('Predict Health Risks'):
