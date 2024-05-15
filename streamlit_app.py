@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import pickle
 try:
-    
+
     model = pickle.load(open("model-2.pkl", 'rb'))
 except FileNotFoundError:
     st.error("The model file was not found. Please ensure the 'model-2.pkl' is placed in the correct directory.")
@@ -58,7 +58,7 @@ AnyHealthcare = st.radio('Do you have any kind of Healthcare?', options=['Yes', 
 AnyHealthcare_numeric = 1 if AnyHealthcare == 'Yes' else 0
 NoDocbcCost = st.radio('Have you ever avoided going to Doctor because of the cost?', options=['Yes', 'No'])
 NoDocbcCost_numeric = 1 if NoDocbcCost == 'Yes' else 0
-GenHlth = st.select_slider('How do you consider your General Health, 1 being very poor and 5 being amazing', options=list(range(1, 6)), value=3)
+GenHlth = st.select_slider('How do you consider your General Health, 1 being amazing and 5 being very poor', options=list(range(1, 6)), value=3)
 MentHlth = st.select_slider('How many days of poor mental health in the past 30 days', options=list(range(1, 31)), value=15)
 PhysHlth = st.select_slider('How many days of poor physical health in the past 30 days', options=list(range(1, 31)), value=15)
 DiffWalk = st.radio('Do you have any difficulty in walking?', options=['Yes', 'No'])
