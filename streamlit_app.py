@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import pickle
 try:
+    
     model = pickle.load(open("model-2.pkl", 'rb'))
 except FileNotFoundError:
     st.error("The model file was not found. Please ensure the 'model-2.pkl' is placed in the correct directory.")
